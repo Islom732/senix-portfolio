@@ -36,7 +36,7 @@ export function Navbar() {
       <motion.nav
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.7, delay: 1.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.7, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
         className="pointer-events-auto flex items-center gap-0.5 rounded-full sm:gap-1 border border-line bg-white/75 p-1.5 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.18)] backdrop-blur-xl"
       >
         <a
@@ -50,7 +50,7 @@ export function Navbar() {
           <a
             key={l.id}
             href={`#${l.id}`}
-            className={`relative rounded-full px-2 py-2 text-[12px] transition-colors sm:px-4 sm:text-sm ${
+            className={`relative rounded-full px-2 py-2 text-[12px] transition-colors max-[340px]:px-1.5 max-[340px]:text-[11px] sm:px-4 sm:text-sm ${
               active === l.id ? "text-white" : "text-muted hover:text-black"
             }`}
           >
@@ -73,7 +73,7 @@ export function Navbar() {
               lang={l}
               aria-pressed={locale === l}
               onClick={() => setLocale(l)}
-              className={`relative rounded-full px-1 py-2 text-[11px] font-medium transition-colors sm:px-2.5 sm:text-xs ${
+              className={`relative rounded-full min-w-7 px-1.5 py-2 text-[11px] max-[340px]:min-w-6 max-[340px]:px-1 font-medium transition-colors sm:px-2.5 sm:text-xs ${
                 locale === l ? "text-white" : "text-muted hover:text-black"
               }`}
             >

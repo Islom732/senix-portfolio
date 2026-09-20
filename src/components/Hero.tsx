@@ -20,16 +20,16 @@ import { TERMINAL_EVENT } from "./Terminal";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 /** Ждём, пока уедет интро-занавес. */
-const START = 1.35;
+const START = 0.9;
 
 const container: Variants = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: START } },
+  show: { transition: { staggerChildren: 0.08, delayChildren: START } },
 };
 
 const item: Variants = {
   hidden: { opacity: 0, y: 26 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.85, ease } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease } },
 };
 
 export function Hero() {

@@ -175,7 +175,7 @@ export function Terminal() {
 
   // Кнопка-запуск появляется после интро
   useEffect(() => {
-    const id = setTimeout(() => setReady(true), 2200);
+    const id = setTimeout(() => setReady(true), 1700);
     return () => clearTimeout(id);
   }, []);
 
@@ -440,7 +440,7 @@ export function Terminal() {
             key="launcher"
             type="button"
             onClick={() => setOpen(true)}
-            aria-label={tr.open}
+            aria-label={`Ctrl K — ${tr.open}`}
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
@@ -448,7 +448,7 @@ export function Terminal() {
             whileTap={{ scale: 0.95 }}
             className="always-dark fixed bottom-5 right-5 z-[65] flex items-center gap-2 rounded-full border border-line bg-black px-4 py-2.5 font-mono text-sm text-white shadow-[0_12px_40px_-10px_rgba(0,0,0,0.55)]"
           >
-            <span className="text-emerald-400">›_</span>
+            <span aria-hidden className="text-emerald-400">›_</span>
             <span className="hidden text-white/60 sm:inline">Ctrl K</span>
           </motion.button>
         )}

@@ -14,7 +14,7 @@ export function Intro() {
     const t = setTimeout(() => {
       document.body.style.overflow = "";
       setDone(true);
-    }, 1500);
+    }, 1000);
     return () => {
       clearTimeout(t);
       document.body.style.overflow = "";
@@ -46,7 +46,7 @@ export function Intro() {
             aria-hidden
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 1.3, ease: "easeInOut" }}
+            transition={{ duration: 0.9, ease: "easeInOut" }}
             className="absolute bottom-0 left-0 h-[3px] w-full origin-left bg-white"
           />
         </motion.div>

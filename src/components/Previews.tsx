@@ -224,8 +224,8 @@ function WishPoolPreview({ project }: { project: Project }) {
           // next/image с unoptimized не добавляет basePath к файлам из /public
           src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${project.image}`}
           alt={t.projects.screenshot(project.title)}
-          width={1440}
-          height={2050}
+          width={800}
+          height={1139}
           sizes="(min-width: 1280px) 300px, (min-width: 768px) 45vw, 92vw"
           className="h-auto w-full"
         />
