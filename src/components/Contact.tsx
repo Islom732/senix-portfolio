@@ -1,6 +1,7 @@
 "use client";
 
 import { contacts } from "@/content/site";
+import { Brief } from "./Brief";
 import { useI18n } from "./I18nProvider";
 import { ArrowUpRight, ContactIcon } from "./Icons";
 import { MaskLines } from "./MaskLines";
@@ -67,6 +68,8 @@ export function Contact() {
                 </li>
               ))}
             </ul>
+
+            <Brief />
           </div>
         </div>
       </Reveal>

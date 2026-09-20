@@ -9,12 +9,22 @@ import {
   type KeyboardEvent,
 } from "react";
 import { contacts, locales, projectData, type Locale } from "@/content/site";
+import { featureStrings } from "@/content/features";
 import { terminalStrings } from "@/content/terminal";
 import {
   analyzeUsername,
   generateCandidates,
   scanInput,
 } from "@/lib/terminal-tools";
+import {
+  WeatherError,
+  browserName,
+  fetchWeather,
+  generatePassword,
+  passwordEntropy,
+  platformName,
+  sha256Hex,
+} from "@/lib/terminal-utils";
 import { loadVisitors } from "@/lib/visitors";
 import { useI18n } from "./I18nProvider";
 import { useTheme } from "./ThemeProvider";
@@ -45,7 +55,7 @@ const toneClass: Record<Tone, string> = {
 
 const COMMANDS = [
   "about", "projects", "open", "skills", "contact", "scan", "hunt", "lang",
-  "theme", "visitors", "matrix", "sudo hire me", "clear", "exit", "help", "whoami",
+  "theme", "visitors", "pass", "hash", "weather", "neofetch", "matrix", "sudo hire me", "clear", "exit", "help", "whoami",
 ];
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -168,6 +178,8 @@ export function Terminal() {
   const bodyRef = useRef<HTMLDivElement>(null);
   const booted = useRef(false);
   const tr = terminalStrings[locale];
+  const ex = featureStrings[locale].ex;
+  const openedAt = useRef(0);
 
   const print = useCallback((text: string, tone: Tone = "plain", href?: string) => {
     setLines((l) => [...l, { id: idRef.current++, text, tone, href }]);
@@ -175,6 +187,7 @@ export function Terminal() {
 
   // Кнопка-запуск появляется после интро
   useEffect(() => {
+    openedAt.current = Date.now();
     const id = setTimeout(() => setReady(true), 1700);
     return () => clearTimeout(id);
   }, []);
@@ -239,8 +252,11 @@ export function Terminal() {
         case "help":
         case "?": {
           print(tr.helpTitle, "accent");
-          const w = Math.max(...tr.help.map((h) => h.cmd.length)) + 2;
-          tr.help.forEach((h) => print(`  ${h.cmd.padEnd(w)}${h.desc}`));
+          // новые команды вставляем перед clear / exit
+          const list = [...tr.help];
+          list.splice(-2, 0, ...ex.help);
+          const w = Math.max(...list.map((h) => h.cmd.length)) + 2;
+          list.forEach((h) => print(`  ${h.cmd.padEnd(w)}${h.desc}`));
           break;
         }
         case "about":
@@ -314,6 +330,67 @@ export function Terminal() {
           const n = await loadVisitors();
           if (n === null) print(tr.visitors.unavailable, "warn");
           else print(tr.visitors.count(n.toLocaleString(locale)), "ok");
+          break;
+        }
+        case "pass": {
+          const n = arg ? Number(arg) : 16;
+          if (!Number.isInteger(n) || n < 8 || n > 64) {
+            print(ex.pass.usage, "warn");
+            break;
+          }
+          const bits = passwordEntropy(n);
+          const label = ex.pass.strength[bits < 60 ? 0 : bits < 80 ? 1 : bits < 100 ? 2 : 3];
+          print(generatePassword(n), "accent");
+          print(ex.pass.info(n, bits, label), bits < 60 ? "warn" : "ok");
+          print(ex.pass.note, "dim");
+          break;
+        }
+        case "hash": {
+          if (!arg) {
+            print(ex.hash.usage, "warn");
+            break;
+          }
+          print(await sha256Hex(arg), "accent");
+          print(ex.hash.note, "dim");
+          break;
+        }
+        case "weather": {
+          if (!arg) {
+            print(ex.weather.usage, "warn");
+            break;
+          }
+          print(ex.weather.loading, "dim");
+          try {
+            const w = await fetchWeather(arg, locale);
+            print(ex.weather.line(w.city, w.country), "accent");
+            print(`  ${ex.weather.code(w.code)}`, "ok");
+            print(`  ${ex.weather.stats(w.temp, String(w.feels), w.humidity, w.wind)}`);
+            print(ex.weather.note, "dim");
+          } catch (e) {
+            const kind = e instanceof WeatherError ? e.kind : "error";
+            print(kind === "notFound" ? ex.weather.notFound : ex.weather.error, "warn");
+          }
+          break;
+        }
+        case "neofetch": {
+          const nf = ex.neofetch;
+          const mins = Math.floor((Date.now() - openedAt.current) / 60000);
+          const secs = Math.floor(((Date.now() - openedAt.current) % 60000) / 1000);
+          const visits = await loadVisitors();
+          const rows: [string, string][] = [
+            [nf.os, platformName() || nf.unknown],
+            [nf.browser, browserName() || nf.unknown],
+            [nf.screen, `${screen.width}×${screen.height} @${window.devicePixelRatio}x`],
+            [nf.lang, (navigator.languages ?? [navigator.language]).slice(0, 3).join(", ")],
+            [nf.tz, Intl.DateTimeFormat().resolvedOptions().timeZone],
+            [nf.theme, document.documentElement.dataset.theme ?? "light"],
+            [nf.session, `${mins}:${String(secs).padStart(2, "0")}`],
+            [nf.visitors, visits === null ? nf.unknown : visits.toLocaleString(locale)],
+          ];
+          print("guest@senix", "accent");
+          print("-----------", "dim");
+          const kw = Math.max(...rows.map(([k]) => k.length)) + 2;
+          rows.forEach(([k, v]) => print(`${k.padEnd(kw)}${v}`));
           break;
         }
         case "matrix":

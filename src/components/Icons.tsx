@@ -28,6 +28,25 @@ export function ArrowDown() {
   );
 }
 
+export function Heart({ filled = false }: { filled?: boolean }) {
+  return (
+    <svg {...common} width={16} height={16} fill={filled ? "currentColor" : "none"}>
+      <path d="M12 20.5s-7.5-4.4-7.5-10A4.3 4.3 0 0 1 12 7.8a4.3 4.3 0 0 1 7.5 2.7c0 5.6-7.5 10-7.5 10Z" />
+    </svg>
+  );
+}
+
+export function Share() {
+  return (
+    <svg {...common} width={16} height={16}>
+      <circle cx="18" cy="5" r="2.5" />
+      <circle cx="6" cy="12" r="2.5" />
+      <circle cx="18" cy="19" r="2.5" />
+      <path d="m8.2 10.8 7.6-4.6M8.2 13.2l7.6 4.6" />
+    </svg>
+  );
+}
+
 export function Sun() {
   return (
     <svg {...common} width={16} height={16}>

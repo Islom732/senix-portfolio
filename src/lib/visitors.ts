@@ -7,14 +7,14 @@ import { useEffect, useState } from "react";
   Один браузер засчитывается один раз (флаг в localStorage); локальная
   разработка счётчик не накручивает — только читает значение.
 */
-const API = "https://abacus.jasoncameron.dev";
-const NAMESPACE = "senix-portfolio-utkir";
+export const API = "https://abacus.jasoncameron.dev";
+export const NAMESPACE = "senix-portfolio-utkir";
 const KEY = "visits";
 const FLAG = "visited";
 
 let pending: Promise<number | null> | null = null;
 
-const isLocal = () =>
+export const isLocal = () =>
   /^(localhost|127\.|0\.0\.0\.0|\[::1\]|192\.168\.|10\.)/.test(location.hostname);
 
 async function call(action: "hit" | "get"): Promise<number | null> {

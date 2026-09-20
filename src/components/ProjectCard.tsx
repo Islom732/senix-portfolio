@@ -10,7 +10,9 @@ import type { PointerEvent } from "react";
 import type { Project } from "@/content/site";
 import { Button } from "./Button";
 import { useI18n } from "./I18nProvider";
-import { ArrowUpRight } from "./Icons";
+import { featureStrings } from "@/content/features";
+import { useLike } from "@/lib/likes";
+import { Heart, ArrowUpRight } from "./Icons";
 import { Preview } from "./Previews";
 
 export function ProjectCard({
@@ -20,7 +22,9 @@ export function ProjectCard({
   project: Project;
   index: number;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const slug = project.title.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  const { count, liked, like } = useLike(slug);
   // 3D-наклон
   const rx = useSpring(useMotionValue(0), { stiffness: 220, damping: 20 });
   const ry = useSpring(useMotionValue(0), { stiffness: 220, damping: 20 });
@@ -102,14 +106,39 @@ export function ProjectCard({
             ))}
           </ul>
 
-          {project.url && (
-            <div className="mt-auto pt-6">
+          <div className="mt-auto flex items-center justify-between gap-3 pt-6">
+            {project.url ? (
               <Button href={project.url} external className="!px-5 !py-2.5">
                 {t.projects.open}
                 <ArrowUpRight size={14} />
               </Button>
-            </div>
-          )}
+            ) : (
+              <span />
+            )}
+            <motion.button
+              type="button"
+              onClick={like}
+              aria-pressed={liked}
+              aria-label={featureStrings[locale].like.label(project.title)}
+              whileTap={{ scale: 0.85 }}
+              className={`flex h-10 items-center gap-2 rounded-full border px-4 text-sm transition-colors ${
+                liked
+                  ? "border-rose-500/40 bg-rose-500/10 text-rose-500"
+                  : "border-line text-muted hover:border-rose-500/40 hover:text-rose-500"
+              }`}
+            >
+              <motion.span
+                key={String(liked)}
+                initial={liked ? { scale: 0.4 } : false}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 500, damping: 12 }}
+                className="flex"
+              >
+                <Heart filled={liked} />
+              </motion.span>
+              <span className="min-w-[1ch] font-mono text-xs tabular-nums">{liked ? Math.max(count ?? 0, 1) : (count ?? "–")}</span>
+            </motion.button>
+          </div>
         </div>
       </motion.article>
     </motion.div>

@@ -1,15 +1,36 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { featureStrings } from "@/content/features";
+import { copyText } from "@/lib/clipboard";
 import { contacts } from "@/content/site";
 import { useVisitors } from "@/lib/visitors";
 import { CountUp } from "./CountUp";
 import { useI18n } from "./I18nProvider";
-import { ArrowUpRight, ContactIcon } from "./Icons";
+import { ArrowUpRight, ContactIcon, Share } from "./Icons";
 
 export function Footer() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const visitors = useVisitors();
+  const sf = featureStrings[locale].share;
+  const [shared, setShared] = useState(false);
+
+  async function onShare() {
+    const url = location.href.split("#")[0];
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: t.meta.title, text: t.meta.description, url });
+        return;
+      } catch (e) {
+        if ((e as DOMException).name === "AbortError") return;
+      }
+    }
+    if (await copyText(url)) {
+      setShared(true);
+      setTimeout(() => setShared(false), 2200);
+    }
+  }
   return (
     <footer className="overflow-hidden border-t border-line">
       <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-5 py-10 sm:flex-row sm:px-8">
@@ -47,6 +68,24 @@ export function Footer() {
               </li>
             ))}
           </ul>
+          <button
+            type="button"
+            onClick={onShare}
+            className="ml-2 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted transition-colors hover:text-black"
+          >
+            <Share />
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={shared ? "c" : "n"}
+                initial={{ opacity: 0, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15 }}
+              >
+                {shared ? sf.copied : sf.label}
+              </motion.span>
+            </AnimatePresence>
+          </button>
           <a
             href="#top"
             className="ml-2 inline-flex items-center gap-1 rounded-full px-3 py-2 text-sm text-muted transition-colors hover:text-black"

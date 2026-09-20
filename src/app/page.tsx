@@ -12,6 +12,7 @@ import { MotionProvider } from "@/components/MotionProvider";
 import { Navbar } from "@/components/Navbar";
 import { Playground } from "@/components/Playground";
 import { Projects } from "@/components/Projects";
+import { SectionDots } from "@/components/SectionDots";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Terminal } from "@/components/Terminal";
@@ -29,6 +30,7 @@ export default function Home() {
       <ClickBurst />
       <ScrollProgress />
       <Navbar />
+      <SectionDots />
       <Terminal />
       <main id="main" className="flex-1">
         <Hero />
