@@ -2,6 +2,7 @@ import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
 import { ClickBurst } from "@/components/ClickBurst";
 import { Cursor } from "@/components/Cursor";
+import { Extras } from "@/components/Extras";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { I18nProvider } from "@/components/I18nProvider";
@@ -22,13 +23,14 @@ export default function Home() {
     <I18nProvider>
     <MotionProvider>
       <SmoothScroll />
+      <Extras />
       <Intro />
       <Cursor />
       <ClickBurst />
       <ScrollProgress />
       <Navbar />
       <Terminal />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <Hero />
         <Marquee />
         <Projects />

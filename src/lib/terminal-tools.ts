@@ -77,15 +77,15 @@ const CONS = "bcdfghjklmnprstvzkx";
 const VOW = "aeiou";
 const pick = (s: string) => s[Math.floor(Math.random() * s.length)];
 
-/** Кандидаты «звучных» пятибуквенных имён вроде CVCVC. */
+/** Кандидаты «звучных» имён вроде CVCVC — от лучшего к худшему по оценке. */
 export function generateCandidates(count = 6): string[] {
-  const patterns = ["CVCVC", "CVCCV", "VCVCV", "CVVCV", "CVCVV"];
+  const patterns = ["CVCVC", "CVCCV", "VCVCV", "CVVCV", "CVCVCV", "CVCCVC", "CVCVV"];
   const out = new Set<string>();
   while (out.size < count) {
     const p = patterns[Math.floor(Math.random() * patterns.length)];
     out.add([...p].map((c) => (c === "C" ? pick(CONS) : pick(VOW))).join(""));
   }
-  return [...out];
+  return [...out].sort((a, b) => (analyzeUsername(b).score ?? 0) - (analyzeUsername(a).score ?? 0));
 }
 
 /* ───────────── scan: антифрод ───────────── */

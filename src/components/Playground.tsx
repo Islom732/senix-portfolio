@@ -180,7 +180,7 @@ function Scanner() {
                     exit={{ opacity: 0, x: 12 }}
                     className="flex gap-3 text-sm leading-snug"
                   >
-                    <span className="mt-0.5 shrink-0 rounded-md border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted">
+                    <span className="mt-0.5 shrink-0 self-start rounded-md border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted">
                       {s.code}
                     </span>
                     <span>{tr.scan.signal(s)}</span>
@@ -306,6 +306,35 @@ function Hunter() {
             <button key={n} type="button" onClick={() => setValue(n)} className={chipCls}>
               @{n}
             </button>
+          ))}
+        </div>
+      </div>
+      <div className="mt-auto border-t border-line pt-5">
+        <p className="mb-3 text-xs font-medium uppercase tracking-[0.16em] text-muted">
+          {pg.hunt.legend}
+        </p>
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          {(
+            [
+              ["common", "1–37"],
+              ["rare", "38–59"],
+              ["epic", "60–79"],
+              ["legendary", "80–100"],
+            ] as const
+          ).map(([tier, range]) => (
+            <div
+              key={tier}
+              className={`rounded-xl border p-2.5 transition-colors ${
+                result?.rarity === tier ? "border-black" : "border-line"
+              }`}
+            >
+              <span
+                className="block h-1.5 w-full rounded-full"
+                style={{ background: rarityColor[tier] }}
+              />
+              <p className="mt-2 truncate text-[11px] font-medium">{tr.hunt.rarity[tier]}</p>
+              <p className="font-mono text-[10px] text-muted">{range}</p>
+            </div>
           ))}
         </div>
       </div>

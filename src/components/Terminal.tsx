@@ -20,6 +20,7 @@ import { useI18n } from "./I18nProvider";
 import { useTheme } from "./ThemeProvider";
 
 export const TERMINAL_EVENT = "senix:terminal";
+export const MATRIX_EVENT = "senix:matrix";
 
 type Tone = "cmd" | "dim" | "ok" | "warn" | "bad" | "accent" | "plain";
 
@@ -195,11 +196,14 @@ export function Terminal() {
       }
     }
     const onEvent = () => setOpen((o) => !o);
+    const onMatrix = () => setEffect("matrix");
     window.addEventListener("keydown", onKey);
     window.addEventListener(TERMINAL_EVENT, onEvent);
+    window.addEventListener(MATRIX_EVENT, onMatrix);
     return () => {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener(TERMINAL_EVENT, onEvent);
+      window.removeEventListener(MATRIX_EVENT, onMatrix);
     };
   }, []);
 

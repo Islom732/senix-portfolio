@@ -20,6 +20,7 @@ export interface PlaygroundStrings {
     label: string;
     placeholder: string;
     generate: string;
+    legend: string;
     pick: string;
     empty: string;
   };
@@ -52,6 +53,7 @@ const ru: PlaygroundStrings = {
     label: "Юзернейм",
     placeholder: "например, xzboq",
     generate: "Сгенерировать",
+    legend: "Шкала редкости",
     pick: "Нажми на имя, чтобы проверить:",
     empty: "Введи имя — оценю формат и редкость.",
   },
@@ -77,6 +79,7 @@ const en: PlaygroundStrings = {
     label: "Username",
     placeholder: "e.g. xzboq",
     generate: "Generate",
+    legend: "Rarity scale",
     pick: "Tap a name to check it:",
     empty: "Type a name — I'll rate its format and rarity.",
   },
@@ -102,6 +105,7 @@ const uz: PlaygroundStrings = {
     label: "Username",
     placeholder: "masalan, xzboq",
     generate: "Yaratish",
+    legend: "Noyoblik shkalasi",
     pick: "Tekshirish uchun nomni bosing:",
     empty: "Nom kiriting — format va noyobligini baholayman.",
   },

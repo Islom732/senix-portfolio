@@ -25,6 +25,11 @@ export interface Project extends ProjectData {
   description: string;
 }
 
+/** Публичный адрес сайта (без слеша на конце) — для OG-тегов, sitemap и canonical. */
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://islom732.github.io/senix-portfolio"
+).replace(/\/$/, "");
+
 export const locales = ["ru", "en", "uz"] as const;
 export type Locale = (typeof locales)[number];
 export const defaultLocale: Locale = "ru";
@@ -45,6 +50,8 @@ export interface Dictionary {
   ui: {
     language: string;
     visitors: string;
+    skip: string;
+    away: string;
     theme: { toDark: string; toLight: string };
     scrollDown: string;
     technologies: string;
@@ -149,6 +156,8 @@ const ru: Dictionary = {
   ui: {
     language: "Язык",
     visitors: "Посетителей",
+    skip: "К содержимому",
+    away: "Вернись, я скучаю 👀",
     theme: { toDark: "Включить тёмную тему", toLight: "Включить светлую тему" },
     scrollDown: "Прокрутить вниз",
     technologies: "Технологии",
@@ -247,6 +256,8 @@ const en: Dictionary = {
   ui: {
     language: "Language",
     visitors: "Visitors",
+    skip: "Skip to content",
+    away: "Come back, I miss you 👀",
     theme: { toDark: "Switch to dark theme", toLight: "Switch to light theme" },
     scrollDown: "Scroll down",
     technologies: "Technologies",
@@ -345,6 +356,8 @@ const uz: Dictionary = {
   ui: {
     language: "Til",
     visitors: "Tashrif buyuruvchilar",
+    skip: "Kontentga o'tish",
+    away: "Qaytib keling, sog'indim 👀",
     theme: { toDark: "Qorong'i mavzuga o'tish", toLight: "Yorug' mavzuga o'tish" },
     scrollDown: "Pastga aylantirish",
     technologies: "Texnologiyalar",

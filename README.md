@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# senix-portfolio
 
-## Getting Started
+Портфолио Уткира К. — фронтенд-разработчика и автора Telegram-ботов.
 
-First, run the development server:
+**Живой сайт:** https://islom732.github.io/senix-portfolio/
+
+## Что внутри
+
+- **Три языка** — русский, английский, узбекский. Определяется по браузеру, выбор запоминается.
+- **Светлая и тёмная тема** — по умолчанию системная, без вспышки при загрузке.
+- **Интерактивный терминал** — `` ` `` или `Ctrl+K`. Команды: `about`, `projects`, `scan`, `hunt`, `visitors`, `lang`, `theme`, `matrix`, `sudo hire me` и другие.
+- **Песочница** — рабочие мини-версии моих ботов прямо на странице:
+  - антифрод-сканер ссылок с Risk Score (как в Kiber Yordamchi);
+  - оценка и генератор Telegram-юзернеймов (как в KravlezSearch).
+- **Счётчик посетителей** на публичном API Abacus (один браузер — один визит).
+- Частицы в имени, интерактивное поле точек, 3D-карточки, бегущая строка, искры от кликов, плавный скролл (Lenis).
+- Пасхалки: код Konami, заголовок вкладки, `sudo hire me`.
+- SEO: OG-картинка, Twitter Card, JSON-LD, `sitemap.xml`, `robots.txt`, своя 404.
+
+## Стек
+
+Next.js 16 (App Router, статический экспорт) · React 19 · TypeScript · Tailwind CSS 4 · Framer Motion · Lenis
+
+## Запуск
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # статический сайт в ./out
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Где что менять
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Что | Файл |
+| --- | --- |
+| Тексты, проекты, навыки, контакты (RU/EN/UZ) | `src/content/site.ts` |
+| Тексты терминала | `src/content/terminal.ts` |
+| Тексты песочницы | `src/content/playground.ts` |
+| Логика сканера и оценки юзернеймов | `src/lib/terminal-tools.ts` |
+| Счётчик посетителей (`NAMESPACE`) | `src/lib/visitors.ts` |
+| Цвета и темы | `src/app/globals.css` |
+| Адрес сайта для OG/sitemap | `SITE_URL` в `src/content/site.ts` или `NEXT_PUBLIC_SITE_URL` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Фото для аватара: положить файл в `public/` и указать путь в `avatar` (`src/content/site.ts`).
 
-## Learn More
+## Деплой
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Сайт публикуется на GitHub Pages через GitHub Actions (`.github/workflows/deploy.yml`) при каждом пуше в `main`.
+Подпапку `/<репозиторий>` (`basePath`) workflow подставляет сам через `NEXT_PUBLIC_BASE_PATH`.
+Для любого другого хостинга достаточно `npm run build` и папки `out/`.
